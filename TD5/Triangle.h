@@ -15,15 +15,6 @@ class Triangle : public Object
       B = PointB;
       C = PointC;
       N = normal_sign * (B - A).cross(C - A).getNormalized();
-
-      /*
-      std::cout << "**************************************************" << std::endl;
-      std::cout << "A = (" << A[0] << ',' << A[1] << ',' << A[2] << ")" << std::endl;
-      std::cout << "B = (" << B[0] << ',' << B[1] << ',' << B[2] << ")" << std::endl;
-      std::cout << "C = (" << C[0] << ',' << C[1] << ',' << C[2] << ")" << std::endl;
-      std::cout << "**************************************************" << std::endl;
-      */
-
       albedo = NewAlbedo;
       is_mirror = mirror;
       is_transparent = transparent;

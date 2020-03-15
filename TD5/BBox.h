@@ -10,7 +10,6 @@ class BBox
 
     bool intersect(const Ray &r) const
     {
-      //std::cout << "r.u : (" << r.u[0] << ',' << r.u[1] << ',' << r.u[2] << ')' << std::endl;
       double t_1x = (bmin[0] - r.C[0]) / r.u[0];
       double t_2x = (bmax[0] - r.C[0]) / r.u[0];
       double t_xmin = std::min(t_1x, t_2x);

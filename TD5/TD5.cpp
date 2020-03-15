@@ -78,11 +78,6 @@ int main()
   Geometry girl("girl.obj", 15.,
                   Vector(0., -9.7, 0.), Vector(1., 1., 1.),
                   false, false, -1);
-  /*
-  Geometry chair("Chair/Chair.obj", 10.,
-                  Vector(0., 0., 15.), Vector(1., 0., 0.5),
-                  false, false);
-  */
 
   
   //lumiere etendue
@@ -106,7 +101,6 @@ int main()
                       (4 * M_PI * scene.lumiere->R * scene.lumiere->R * M_PI);
   //scene.addTriangle(triangle1);
   scene.addGeometry(girl);
-  //scene.addGeometry(chair);
 
   //parametres camera
   Vector C(0., 0., 55.);
@@ -118,7 +112,6 @@ int main()
   #pragma omp parallel for schedule(dynamic, 1)
   for (int i = 0; i < H; i++)
   {
-    std::cout << i << std::endl;
     for (int j = 0; j < W; j++)
     {
       Vector final_colour(0., 0., 0.);
@@ -167,9 +160,7 @@ Vector get_colour(const Ray &CurrRay, const Scene &scene, int max_bounces, bool 
   //pour obtenir les information de l'intersection avec la sphere
   Vector Normal, Point;
   int index;
-  //std::cout << "CurrRay.u before TD5: (" << CurrRay.u[0] << ',' << CurrRay.u[1] << ',' << CurrRay.u[2] << ')' << std::endl;
   bool inter = scene.intersect(CurrRay, Point, Normal, index);
-  //std::cout << "CurrRay.u before TD5: (" << CurrRay.u[0] << ',' << CurrRay.u[1] << ',' << CurrRay.u[2] << ')' << std::endl;
 
   Vector sphere_light = Vector(0., 0., 0.);
   if (inter)
@@ -268,12 +259,6 @@ Vector get_colour(const Ray &CurrRay, const Scene &scene, int max_bounces, bool 
 
       //addition de l'eclairage indirect
       Ray newray(Point + 0.001 * Normal, random_dir_indirect);
-      //std::cout << "random_dir_indirect before scene: (" << random_dir_indirect[0] << ',' << random_dir_indirect[1] << ',' << random_dir_indirect[2] << ')' << std::endl;
-      //std::cout << "Normal before scene: (" << Normal[0] << ',' << Normal[1] << ',' << Normal[2] << ')' << std::endl;
-      /*std::cout << "get_colour indirect" << std::endl;
-      std::cout << "newray.u before scene: (" << newray.u[0] << ',' << newray.u[1] << ',' << newray.u[2] << ')' << std::endl;
-      std::cout << "Point before scene: (" << Point[0] << ',' << Point[1] << ',' << Point[2] << ')' << std::endl;
-      */
       sphere_light += get_colour(
                                   newray,
                                   scene, max_bounces - 1,
@@ -326,7 +311,6 @@ Vector random_cos(const Vector &N)
   else
     tangent1_dir = Vector(N[1], -N[0], 0);
 
-  //std::cout << "tangent1_dir before scene: (" << tangent1_dir[0] << ',' << tangent1_dir[1] << ',' << tangent1_dir[2] << ')' << std::endl;
   tangent1_dir = tangent1_dir.getNormalized();
   Vector tangent2_dir = tangent1_dir.cross(N);
 

@@ -27,7 +27,6 @@ class Geometry : public Object
           double i0, i1, i2;
           sscanf(line, "v %lf %lf %lf\n", &i0, &i2, &i1);
           Vector vec = scaling * Vector(i0, i1, i2) + offset;
-          //std::cout << "v :" << vec[0] << ' ' << vec[1] << ' ' << vec[2] << std::endl; 
           vertices.push_back(vec);
         }
 
@@ -68,9 +67,6 @@ class Geometry : public Object
             normalIDs.push_back(k0 - 1);
             normalIDs.push_back(k1 - 1);
             normalIDs.push_back(k2 - 1);
-
-          //std::cout << "f " << i0 << ' ' << j0 << ' ' << k0 << ' ' << i1 << ' ' << j1 << ' ' << k1 << ' ' << i2 << ' ' << j2 << ' ' << k2 << ' ' << std::endl;
-
           }
         }
       }
@@ -78,29 +74,16 @@ class Geometry : public Object
       fclose(f);
 
       build_bvh(&bvh, 0, faces.size() / 3);
-
-      /*std::cout << "vertices.size(): " << vertices.size() << std::endl;
-      std::cout << "normals.size(): " << normals.size() << std::endl;
-      std::cout << "uvs.size(): " << uvs.size() << std::endl;
-      std::cout << "faces.size(): " << faces.size() << std::endl;
-      std::cout << "uvIDs.size(): " << uvIDs.size() << std::endl;
-      std::cout << "normalIDs.size(): " << normalIDs.size() << std::endl;*/
     }
 
     bool intersect(const Ray &r, Vector &Point, Vector &Normal, double &t) const
     {
       bool has_inter = false;
       t = 1E99;
-      //std::cout << "r.u before: (" << r.u[0] << ',' << r.u[1] << ',' << r.u[2] << ')' << std::endl;
       if (!bvh.bbox.intersect(r))
       {
-        /*std::cout << "r.u false: (" << r.u[0] << ',' << r.u[1] << ',' << r.u[2] << ')' << std::endl;
-        std::cout << "return false" << std::endl;*/
         return false;
       }
-      /*std::cout << "r.u after: (" << r.u[0] << ',' << r.u[1] << ',' << r.u[2] << ')' << std::endl;
-      std::cout << "working2" << std::endl;*/
-      //std::cout << "working" << std::endl;
 
       std::list<const BVH*> bvh_list;
       bvh_list.push_front(&bvh);
@@ -126,18 +109,15 @@ class Geometry : public Object
             int v0 = faces[i * 3],
                 v1 = faces[i * 3 + 1],
                 v2 = faces[i * 3 + 2];
-            //std::cout << "crear triangulo" << std::endl;
             Triangle current_triangle(
                                         vertices[v0], vertices[v1],
                                         vertices[v2], albedo,
                                         is_mirror, is_transparent,
                                         normal_sign
                                       );
-            //std::cout << "terminar triangulo" << std::endl;
 
             Vector localPoint, localNormal;
             double local_t, alpha, beta, gamma;
-            //std::cout << "r.u : (" << r.u[0] << ',' << r.u[1] << ',' << r.u[2] << ')' << std::endl;
             if (current_triangle.intersect(r, localPoint, localNormal, local_t, alpha, beta, gamma))
             {
               has_inter = true;
@@ -160,11 +140,6 @@ class Geometry : public Object
         }
       }
 
-      /*std::cout << "******************" << std::endl;
-      std::cout << "has_inter = " << has_inter << std::endl;
-      std::cout << "t = " << t << std::endl;
-      std::cout << "Normal = (" << Normal[0] << ',' << Normal[1] << ',' << Normal[2] << ")" << std::endl;
-      std::cout << "Point = (" << Point[0] << ',' << Point[1] << ',' << Point[2] << ")" << std::endl;*/
       return has_inter;      
     }
 

@@ -30,9 +30,7 @@ class Scene
       {
         Vector localPoint, localNormal;
         double local_t;
-        //std::cout << "r.u before scene: (" << r.u[0] << ',' << r.u[1] << ',' << r.u[2] << ')' << std::endl;
         bool local_inter = objects[i]->intersect(r, localPoint, localNormal, local_t);
-        //std::cout << "r.u after scene: (" << r.u[0] << ',' << r.u[1] << ',' << r.u[2] << ')' << std::endl;
         if (local_inter)
         {
           if (local_t < min_t)
