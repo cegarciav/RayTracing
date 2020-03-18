@@ -345,7 +345,8 @@ std::vector<unsigned char> median_filter(const std::vector<unsigned char> &im, i
 
       for (int k = 0; k < 9; k++)
       {
-        if (neighbours[k][0] >= 0 && neighbours[k][1] >= 0)
+        if (neighbours[k][0] >= 0 && neighbours[k][1] >= 0 &&
+            neighbours[k][0] < H && neighbours[k][1] < W)
         {
           red_values.push_back(im[((H - neighbours[k][0] - 1) * W + neighbours[k][1]) * 3 + 0]);
           green_values.push_back(im[((H - neighbours[k][0] - 1) * W + neighbours[k][1]) * 3 + 1]);
