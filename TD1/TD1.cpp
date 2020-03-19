@@ -22,7 +22,8 @@ int main()
   int H = 1024;
 
   //spheres
-  Sphere sphere(Vector(0, 0, 0), 10, Vector(1, 1, 1));
+  Sphere sphere(Vector(10, 0, -20), 10, Vector(1, 1, 1));
+  Sphere sphere2(Vector(-10, 0, -5), 10, Vector(1, 1, 1));
   Sphere ceiling(Vector(0, 1000, 0), 940, Vector(0.8, 0, 0));
   Sphere background(Vector(0, 0, -1000), 940, Vector(0, 1, 0));
   Sphere floor(Vector(0, -1000, 0), 990, Vector(0, 0, 0.8));
@@ -32,6 +33,7 @@ int main()
   //scene
   Scene scene;
   scene.addSphere(sphere);
+  scene.addSphere(sphere2);
   scene.addSphere(ceiling);
   scene.addSphere(background);
   scene.addSphere(floor);
