@@ -30,6 +30,9 @@ int main()
   //spheres
   Sphere sphere(Vector(15, 5, 0), 10, Vector(1, 1, 1), true);
   Sphere sphere2(Vector(-15, 5, 0), 10, Vector(1, 1, 1), false, true);
+  Sphere sphere3(Vector(-10, 10, -15), 10, Vector(1, 0, 1));
+  Sphere sphere4(Vector(10, 5, 0), 10, Vector(1, 0, 0.5));
+  Sphere sphere5(Vector(0, 20, -15), 10, Vector(1, 0, 0.5), true);
   Sphere ceiling(Vector(0, 1000, 0), 940, Vector(0.8, 0, 0));
   Sphere background(Vector(0, 0, -1000), 940, Vector(0, 1, 0));
   Sphere floor(Vector(0, -1000, 0), 990, Vector(0, 0, 0.8));
@@ -44,6 +47,9 @@ int main()
   Scene scene(lumiere, intensity);
   scene.addSphere(sphere);
   scene.addSphere(sphere2);
+  //scene.addSphere(sphere3);
+  //scene.addSphere(sphere4);
+  //scene.addSphere(sphere5);
   scene.addSphere(ceiling);
   scene.addSphere(background);
   scene.addSphere(floor);
@@ -67,11 +73,11 @@ int main()
       int index;
       double sphere_light = get_colour(Rayij, scene, index, 5);
 
-      //correction gamma ajoutee      
+      //correction gamma ajoutee
       image[((H - i - 1) * W + j) * 3 + 0] = 
               std::min(255.,
                   std::max(0.,
-                      std::pow(sphere_light * scene[index].getAlbedo(0),
+                      std::pow(sphere_light * scene[index].albedo[0],
                                 1. / 2.2
                               )
                           )
@@ -79,7 +85,7 @@ int main()
       image[((H - i - 1) * W + j) * 3 + 1] =
               std::min(255.,
                   std::max(0.,
-                      std::pow(sphere_light * scene[index].getAlbedo(1),
+                      std::pow(sphere_light * scene[index].albedo[1],
                                 1. / 2.2
                               )
                           )
@@ -87,7 +93,7 @@ int main()
       image[((H - i - 1) * W + j) * 3 + 2] =
               std::min(255.,
                   std::max(0.,
-                      std::pow(sphere_light * scene[index].getAlbedo(2),
+                      std::pow(sphere_light * scene[index].albedo[2],
                                 1. / 2.2
                               )
                           )
@@ -95,7 +101,7 @@ int main()
 
     }
   }
-  stbi_write_png("imageTD2.png", W, H, 3, &image[0], 0);
+  stbi_write_png("gamma.png", W, H, 3, &image[0], 0);
 
   return 0;
 }
