@@ -29,7 +29,7 @@ static std::uniform_real_distribution<double> distribution(0.0, 1.0);
   fonction recursive pour obtenir l'intensité
   de la lumière dans un point donné
 */
-Vector get_colour(const Ray&, const Scene&, int);
+Vector get_colour(const Ray&, const Scene&, int, bool show_lights=true);
 Vector random_gauss_vect(double, double, double);
 Vector random_cos(const Vector&);
 
@@ -40,7 +40,7 @@ int main()
   int H = 800;
 
   //quantite de rayons a lancer
-  const int rays = 500;
+  const int rays = 100;
 
   //spheres
   Sphere sphere(Vector(0., 0., 0.), 10, Vector(1., 0., 0.));
@@ -53,7 +53,7 @@ int main()
   Sphere rightwall(Vector(1000., 0., 0.), 960, Vector(1., 0., 0.5));
 
   //lumiere ponctuelle
-  double intensity = 1000000000;
+  double intensity = 10000000000;
   
   //lumiere etendue
   Sphere lumiere(Vector(0., 60., 0.), 15, Vector(1., 1., 1.));
@@ -69,6 +69,8 @@ int main()
   scene.addSphere(floor);
   scene.addSphere(leftwall);
   scene.addSphere(rightwall);
+  scene.intensity = scene.intensity /
+                      (4 * M_PI * scene.lumiere.R * scene.lumiere.R * M_PI);
 
 
   //parametres camera
@@ -111,13 +113,13 @@ int main()
 
     }
   }
-  stbi_write_png("imageTD4.png", W, H, 3, &image[0], 0);
+  stbi_write_png("profondeur_de_champ.png", W, H, 3, &image[0], 0);
 
   return 0;
 }
 
 
-Vector get_colour(const Ray &CurrRay, const Scene &scene, int max_bounces)
+Vector get_colour(const Ray &CurrRay, const Scene &scene, int max_bounces, bool show_lights)
 {
   if (max_bounces == 0)
     return Vector(0., 0., 0.);
@@ -130,7 +132,12 @@ Vector get_colour(const Ray &CurrRay, const Scene &scene, int max_bounces)
   Vector sphere_light = Vector(0., 0., 0.);
   if (inter)
   {
-    if (scene[index].is_mirror)
+    if (index == 0)
+    {
+      sphere_light = show_lights?(scene.intensity * scene[0].albedo):Vector(0., 0., 0.);
+    }
+
+    else if (scene[index].is_mirror)
     {
       Vector reflected = CurrRay.u - 2 * CurrRay.u.dot(Normal) * Normal;
       reflected = reflected.getNormalized();
@@ -208,7 +215,7 @@ Vector get_colour(const Ray &CurrRay, const Scene &scene, int max_bounces)
       }
 
       else
-        sphere_light = (scene.intensity / (4 * M_PI * dist_light)) *
+        sphere_light = (scene.intensity * scene.lumiere.R * scene.lumiere.R / dist_light) *
                         (std::max(0., Normal.dot(wi)) * random_dir_direct.dot(-wi) /
                                       axe_OP.dot(random_dir_direct)) * scene[index].albedo;
       //FIN ECLAIRAGE DIRECT
@@ -220,7 +227,7 @@ Vector get_colour(const Ray &CurrRay, const Scene &scene, int max_bounces)
       //addition de l'eclairage indirect
       sphere_light += get_colour(
                                   Ray(Point + 0.001 * Normal, random_dir_indirect),
-                                  scene, max_bounces - 1
+                                  scene, max_bounces - 1, false
                                 ) * scene[index].albedo;
       //FIN ECLAIRAGE INDIRECT
 
