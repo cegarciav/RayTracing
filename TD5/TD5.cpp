@@ -45,11 +45,11 @@ std::vector<unsigned char> median_filter(const std::vector<unsigned char>&, int,
 int main()
 {
   //taille image
-  int W = 500;
-  int H = 500;
+  int W = 800;
+  int H = 800;
 
   //quantite de rayons a lancer
-  const int rays = 15;
+  const int rays = 100;
 
   //spheres
   Sphere sphere(Vector(0., 0., 0.), 10, Vector(1., 0., 0.));
@@ -63,14 +63,12 @@ int main()
   
   //triangles
 
-  /*
   Triangle triangle1(
-                      Vector(-50., 0., -50.),
-                      Vector(50., 0., -50.),
-                      Vector(-50., 50., -50.),
-                      Vector(1., 0., 0.5)
+                      Vector(-15., 0., -20.),
+                      Vector(-15., 20., -20.),
+                      Vector(15., 5., 5.),
+                      Vector(1., 1., 1.)
                     );
-  */
 
 
 
@@ -97,10 +95,10 @@ int main()
   scene.addSphere(floor);
   scene.addSphere(leftwall);
   scene.addSphere(rightwall);
+  scene.addTriangle(triangle1);
+  //scene.addGeometry(girl);
   scene.intensity = scene.intensity /
                       (4 * M_PI * scene.lumiere->R * scene.lumiere->R * M_PI);
-  //scene.addTriangle(triangle1);
-  scene.addGeometry(girl);
 
   //parametres camera
   Vector C(0., 0., 55.);
@@ -144,8 +142,8 @@ int main()
     }
   }
   std::vector<unsigned char> newimage = median_filter(image, H, W);
-  stbi_write_png("imageTD5_girl-chair_nomedian.png", W, H, 3, &image[0], 0);
-  stbi_write_png("imageTD5_girl-chair-median.png", W, H, 3, &newimage[0], 0);
+  stbi_write_png("triangle_nomedian.png", W, H, 3, &image[0], 0);
+  stbi_write_png("triangle_median.png", W, H, 3, &newimage[0], 0);
 
   return 0;
   
