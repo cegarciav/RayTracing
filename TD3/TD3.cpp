@@ -1,4 +1,4 @@
-//use g++ TD4.cpp -fopenmp dans la terminale
+//use g++ TD3.cpp -fopenmp dans la terminale
 
 #define _CRT_SECURE_NO_WARNINGS 1
 #include <iostream>
@@ -34,15 +34,15 @@ Vector get_colour(const Ray&, const Scene&, int&, int);
 int main()
 {
   //taille image
-  int W = 1024;
-  int H = 1024;
+  int W = 800;
+  int H = 800;
 
   //quantite de rayons a lancer
   const int rays = 100;
 
   //spheres
   Sphere sphere(Vector(15, 5, 0), 10, Vector(1, 1, 1));
-  Sphere sphere2(Vector(-15, 5, 0), 10, Vector(1, 1, 1));
+  Sphere sphere2(Vector(-15, 5, 0), 10, Vector(1, 1, 1), false, true);
   Sphere ceiling(Vector(0, 1000, 0), 940, Vector(0.8, 0, 0));
   Sphere background(Vector(0, 0, -1000), 940, Vector(0, 1, 0));
   Sphere floor(Vector(0, -1000, 0), 990, Vector(0, 0, 0.8));
@@ -96,7 +96,7 @@ int main()
 
     }
   }
-  stbi_write_png("imageTD3.png", W, H, 3, &image[0], 0);
+  stbi_write_png("indirect_transparent.png", W, H, 3, &image[0], 0);
 
   return 0;
 }
